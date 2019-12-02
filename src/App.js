@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoList from './components/TodoComponents/TodoList';
 import TodoForm from './components/TodoComponents/TodoForm';
+import './components/TodoComponents/Todo.css';
 
 const toDos = [
   {
@@ -24,12 +25,13 @@ class App extends React.Component {
     super();
     this.state = {
       toDos: toDos,
+      newToDo: '',
     }
   };
 
   addToDo = toDoText => {
     const newToDo = {
-      task: '',
+      task: toDoText,
       id: Date.now(),
       completed: false,
     }
@@ -38,16 +40,46 @@ class App extends React.Component {
     })
   }
 
+  toggleComplete = id => {
+    let toDosCopy = this.state.toDos.map( toDo => {
+      if(toDo.id === id) {
+        toDo.completed = !toDo.completed;
+        return toDo;
+      }
+      return toDo;
+    })
+    this.setState({toDos: toDosCopy})
+  }
+
+  handleChanges = event => {
+    this.setState({newToDo: event.target.value})
+    console.log(this.state.newToDo);
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.addToDo(this.state.newToDo);
+  }
+
   render() {
     console.log('rendering...')
+    console.log(this.state.toDos);
     return (
       <div>
         <h2>Welcome to your Todo App!</h2>
         <div>
-          <TodoForm addToDo={this.addToDo}/>
+          <TodoForm 
+            addToDo={this.addToDo} 
+            handleChanges={this.handleChanges} 
+            handleSubmit={this.handleSubmit} 
+            newToDo={this.newToDo}
+          />
         </div>
         <div>
-          <TodoList toDos={this.state.toDos}/>
+          <TodoList 
+            toDos={this.state.toDos} 
+            toggleComplete={this.toggleComplete} 
+          />
         </div>
       </div>
     );
