@@ -40,6 +40,11 @@ class App extends React.Component {
     })
   }
 
+  removeCompleted = () => {
+    const filteredToDo = this.state.toDos.filter(toDo => !toDo.completed);
+    this.setState({toDos: filteredToDo})
+  }
+
   toggleComplete = id => {
     let toDosCopy = this.state.toDos.map( toDo => {
       if(toDo.id === id) {
@@ -80,6 +85,9 @@ class App extends React.Component {
             toDos={this.state.toDos} 
             toggleComplete={this.toggleComplete} 
           />
+          <button onClick={this.removeCompleted}>
+            Clear Completed
+          </button>
         </div>
       </div>
     );
